@@ -1,68 +1,47 @@
 <?php
+// exceptions.php
 
-class CheckoutSDKError extends Exception {
-    public function __construct($message) {
-        parent::__construct($message);
-    }
-}
+class CheckoutSDKError extends Exception {}
 
 class APIError extends CheckoutSDKError {
-    public $status_code;
-    public $error_code;
-    public $message;
-    public $field_error_items;
+    public $statusCode;
+    public $errorCode;
+    public $fieldErrorItems;
 
-    public function __construct($status_code, $error_code, $message, $field_error_items = null) {
-        $this->status_code = $status_code;
-        $this->error_code = $error_code;
-        $this->message = $message;
-        $this->field_error_items = $field_error_items ?? [];
+    public function __construct($statusCode, $errorCode, $message, $fieldErrorItems = null) {
+        $this->statusCode = $statusCode;
+        $this->errorCode = $errorCode;
+        $this->fieldErrorItems = $fieldErrorItems ?? [];
 
-        parent::__construct("API Error: Status Code $status_code, Error Code: $error_code, Message: $message");
+        parent::__construct("API Error: Status Code $statusCode, Error Code: $errorCode, Message: $message");
     }
 }
 
 class InvalidParameterError extends CheckoutSDKError {
-    public $parameter_name;
-    public $field_error_items;
+    public $parameterName;
+    public $fieldErrorItems;
 
-    public function __construct($parameter_name, $message = null, $field_error_items = null) {
-        $this->parameter_name = $parameter_name;
-        $this->field_error_items = $field_error_items ?? [];
+    public function __construct($parameterName, $message = null, $fieldErrorItems = null) {
+        $this->parameterName = $parameterName;
+        $this->fieldErrorItems = $fieldErrorItems;
 
-        parent::__construct("Invalid parameter '$parameter_name'." . ($message ? " $message" : ""));
+        parent::__construct("Invalid parameter '$parameterName'." . ($message ? " $message" : ""));
     }
 }
 
-class TimeoutError extends CheckoutSDKError {
-    public function __construct($message = "Request to BoxPay API timed out") {
-        parent::__construct($message);
-    }
-}
 
-class AuthenticationError extends CheckoutSDKError {
-    public function __construct($message = "Authentication failed") {
-        parent::__construct($message);
-    }
-}
+class TimeoutError extends CheckoutSDKError {}
+
+class AuthenticationError extends CheckoutSDKError {}
 
 class ResourceNotFoundError extends CheckoutSDKError {
-    public $resource_type;
-    public $resource_id;
+    public $resourceType;
+    public $resourceId;
 
-    public function __construct($resource_type, $resource_id) {
-        parent::__construct("$resource_type with ID '$resource_id' not found");
+    public function __construct($resourceType, $resourceId) {
+        parent::__construct("$resourceType with ID '$resourceId' not found");
     }
 }
 
-class PaymentDeclinedError extends CheckoutSDKError {
-    public function __construct($reason = null) {
-        $message = "Payment declined";
-        if ($reason) {
-            $message .= ": $reason";
-        }
-        parent::__construct($message);
-    }
-}
+class PaymentDeclinedError extends CheckoutSDKError {}
 
-?>

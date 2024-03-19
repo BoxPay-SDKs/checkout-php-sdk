@@ -10,8 +10,12 @@ class BoxpayClient {
         $this->merchant_id = $merchant_id;
     }
 
+    public function getApiClient() {
+        return $this->api_client;
+    }
+
    // Example method for making API calls through the ApiClient
     public function create_checkout_session($request_data) {
-        
+        // Implementation here
     }
 }

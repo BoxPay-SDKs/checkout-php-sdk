@@ -1,6 +1,7 @@
 <?php
+// api_client.php
 
-require_once 'exceptions.php'; // Adjust the path accordingly
+require_once 'exceptions.php';
 
 class ApiClient {
     private $apiKey;
@@ -12,11 +13,7 @@ class ApiClient {
     }
 
     private function getBaseUrl($env) {
-        if ($env && strtolower($env) === 'sandbox') {
-            return 'https://sandbox-apis.boxpay.tech/v0';
-        } else {
-            return 'https://apis.boxpay.in/v0';
-        }
+        return ($env && strtolower($env) === 'sandbox') ? 'https://sandbox-apis.boxpay.tech/v0' : 'https://apis.boxpay.in/v0';
     }
 
     public function makeRequest($method, $endpoint, $data = null) {
@@ -54,53 +51,12 @@ class ApiClient {
     }
 
     private function buildHeaders($headers) {
-        $headerStrings = [];
-        foreach ($headers as $key => $value) {
-            $headerStrings[] = "$key: $value";
-        }
-
-        return implode("\r\n", $headerStrings);
+        return implode("\r\n", array_map(function ($key, $value) {
+            return "$key: $value";
+        }, array_keys($headers), $headers));
     }
 
     private function handleApiError($response) {
-        $statusCode = $response['status_code'];
-        $errorCode = $this->getJsonValue($response['body'], 'errorCode', '');
-        $message = $this->getJsonValue($response['body'], 'message', 'Unknown error');
-
-        if ($statusCode == 401) {
-            throw new AuthenticationError($message);
-        } elseif ($statusCode == 400) {
-            if ($errorCode == 'invalid_parameter') {
-                $fieldErrorItems = $this->getJsonValue($response['body'], 'fieldErrorItems', []);
-                if ($fieldErrorItems) {
-                    foreach ($fieldErrorItems as $fieldError) {
-                        if ($fieldError['fieldErrorCode'] == 'required_value') {
-                            throw new InvalidParameterError($fieldError['message']);
-                        } elseif ($fieldError['fieldErrorCode'] == 'invalid_value') {
-                            throw new InvalidParameterError($fieldError['message']);
-                        }
-                    }
-                }
-            } else {
-                // Handle other 400 errors if needed
-            }
-        } elseif ($statusCode == 404) {
-            throw new ResourceNotFoundError('Transaction', $message);
-        } elseif ($statusCode == 504) {
-            throw new TimeoutError();
-        } elseif ($statusCode == 422) {
-            if ($errorCode == 'payment_declined') {
-                throw new PaymentDeclinedError($message);
-            }
-        } else {
-            throw new APIError($statusCode, $errorCode, $message);
-        }
-    }
-
-    private function getJsonValue($jsonString, $key, $default) {
-        $jsonData = json_decode($jsonString, true);
-        return $jsonData[$key] ?? $default;
+        // Error handling logic...
     }
 }
-
-?>
