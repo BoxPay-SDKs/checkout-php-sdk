@@ -1,0 +1,10 @@
+{
+    "name": "boxpay/checkout-php-sdk",
+    "description": "SDK for seamless checkout integration by Boxpay",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Boxpay\\CheckoutSDK\\": "checkout-php-sdk/src/"
+        }
+    }
+}

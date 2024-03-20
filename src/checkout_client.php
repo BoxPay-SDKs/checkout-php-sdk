@@ -1,5 +1,4 @@
 <?php
-
 require_once 'exceptions.php'; // Adjust the path accordingly
 require_once 'models.php'; // Adjust the path accordingly
 require_once 'boxpay_client.php'; // Adjust the path accordingly
@@ -30,7 +29,29 @@ class CheckoutClient {
             $response = $this->boxpayClient->getApiClient()->makeRequest('POST', 'transactions/inquiries', ['data' => $data]);
 
             if ($response['statusCode'] == 200) {
-                return new TransactionInquiryResponse($response);
+                // Construct TransactionInquiryResponse instance
+                return new TransactionInquiryResponse(
+                    $response['operationId'],
+                    $response['eventId'],
+                    $response['status'],
+                    $response['captureRequired'],
+                    $response['legalEntityCode'],
+                    $response['clientPosId'],
+                    $response['orderId'],
+                    $response['caller'],
+                    $response['pspCode'],
+                    $response['pspReference'],
+                    $response['pspOperationItems'],
+                    $response['timestamp'],
+                    $response['authCode'],
+                    $response['money'],
+                    $response['actions'],
+                    $response['additionalData'],
+                    $response['pspErrorDetails'],
+                    $response['shopper'],
+                    $response['paymentMethod'],
+                    $response['recurring']
+                );
             } else {
                 $this->handleNon200Response($response);
             }
@@ -73,4 +94,3 @@ class CheckoutClient {
     }
 }
 
-?>

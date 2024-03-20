@@ -1,4 +1,5 @@
 <?php
+// models.php
 
 class LegalEntity {
     public $code;
@@ -252,8 +253,68 @@ class CheckoutSessionResponse {
         );
     }
 }
+class TransactionInquiryDetails {
+    public $id;
+    public $transactionId;
+    public $name;
 
-// // Sample usage
+    public function __construct($id = null, $transactionId, $name = "Authorisation") {
+        $this->id = $id;
+        $this->transactionId = $transactionId;
+        $this->name = $name;
+    }
+}
+
+class TransactionInquiryResponse {
+    public $operationId;
+    public $eventId;
+    public $status;
+    public $captureRequired;
+    public $legalEntityCode;
+    public $clientPosId;
+    public $orderId;
+    public $caller;
+    public $pspCode;
+    public $pspReference;
+    public $pspOperationItems;
+    public $timestamp;
+    public $authCode;
+    public $money;
+    public $actions;
+    public $additionalData;
+    public $pspErrorDetails;
+    public $shopper;
+    public $paymentMethod;
+    public $recurring;
+
+    public function __construct($operationId, $eventId, $status, $captureRequired, $legalEntityCode, $clientPosId, $orderId, $caller, $pspCode, $pspReference, $pspOperationItems, $timestamp, $authCode, $money, $actions, $additionalData, $pspErrorDetails, $shopper, $paymentMethod, $recurring) {
+        $this->operationId = $operationId;
+        $this->eventId = $eventId;
+        $this->status = $status;
+        $this->captureRequired = $captureRequired;
+        $this->legalEntityCode = $legalEntityCode;
+        $this->clientPosId = $clientPosId;
+        $this->orderId = $orderId;
+        $this->caller = $caller;
+        $this->pspCode = $pspCode;
+        $this->pspReference = $pspReference;
+        $this->pspOperationItems = $pspOperationItems;
+        $this->timestamp = $timestamp;
+        $this->authCode = $authCode;
+        $this->money = $money;
+        $this->actions = $actions;
+        $this->additionalData = $additionalData;
+        $this->pspErrorDetails = $pspErrorDetails;
+        $this->shopper = $shopper;
+        $this->paymentMethod = $paymentMethod;
+        $this->recurring = $recurring;
+    }
+}
+?>
+
+
+
+<!-- // // Sample usage
 // $legalEntity = new LegalEntity();
 // $legalEntity->code = 'ABC';
 
@@ -321,4 +382,4 @@ class CheckoutSessionResponse {
 // print_r($response);
 // echo '</pre>';
 
-// ?>
+ -->
